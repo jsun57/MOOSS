@@ -1,0 +1,81 @@
+env:
+  env_name: finger/spin
+  pre_transform_image_size:               # 100 or 84
+  - 100
+  - 100
+  image_size:                             # controls patch_size    
+  - 84
+  - 84
+  action_repeat: 2
+  frame_stack: 3
+  replay_buffer_capacity: 100000
+
+misc:
+  exp_id: 'spin'
+  save_tb: false
+  save_buffer: false
+  save_video: false
+  save_model: false
+  detach_encoder: false
+  log_interval: 100
+
+train:
+  agent: 'stm_agent'
+  encoder_type: 'conv_0'
+  decoder_type: 'trans_0'
+  init_steps: 1000
+  num_env_steps: 100100 # 500100
+  batch_size: 512
+
+eval:
+  eval_freq: 5000
+  num_eval_episodes: 10
+
+critic:
+  critic_lr: 1e-3
+  critic_beta: 0.9
+  critic_tau: 0.01
+  critic_target_update_freq: 2
+
+actor:
+  actor_lr: 1e-3
+  actor_beta: 0.9
+  actor_log_std_min: -10
+  actor_log_std_max: 2
+  actor_update_freq: 2
+
+stm_enc_dec:
+  encoder_lr: 1e-3
+  ac_hidden_dim: 1024
+  proj_hidden_dim: 100
+  mask_ratio: 0.5
+  clip_frames: 16
+  patch_size:
+  - 7
+  - 7
+  block_size: 8
+  num_layers: 4
+  encoder_feature_dim: 64
+  encoder_tau: 0.05
+  num_dec_layers: 2
+  num_dec_heads: 4
+  num_filters: 64
+  conts_weight: 0.1
+  conts_bs: 6
+  conts_skip: 0.075
+  conts_mint: 0.07
+
+sac:
+  discount: 0.99
+  init_temperature: 0.1
+  alpha_lr: 1e-4
+  alpha_beta: 0.5
+  augmentation:
+  - crop
+  - intensity
+  aug_prob: 1.0
+  auxiliary_task_batch_size: 128
+  auxiliary_task_lr: 1e-3
+  momentum_tau: 0.05
+  sigma: 0.1
+  warmup: false
